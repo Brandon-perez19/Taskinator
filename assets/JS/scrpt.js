@@ -234,52 +234,20 @@ var saveTasks = function(){
 
 var loadTasks = function(){
   // gets task items from localstorage
-  tasks = localStorage.getItem(`tasks`)
-  console.log(tasks)
+  var savedTasks = localStorage.getItem(`tasks`);
 
-  if (tasks === null) {
-    tasks = []
-    return false
+  if (savedTasks === null) {
+    return false;
   }
-  //converts tasks from the string format back into an array of objects
-  tasks = JSON.parse(tasks);
-  console.log(tasks)
+  //converts tasks from the string format back int(o an array of objects
+  savedTasks = JSON.parse(savedTasks);
 
-  //iterates through a tasks array and creates task elements on the page from it
-
-  for (var i = 0; i < tasks.length; i++){
-    tasks[i].id = taskIdCounter
-    console.log(tasks[i])
-    
-    var listItemEl = document.createElement("li")
-
-    listItemEl.className = "task-item"
-    listItemEl.setAttribute("data-task-id", tasks[i].id)
-
-    var taskInfoEl = document.createElement("div")
-
-    taskInfoEl.className = "task-info"
-    taskInfoEl.innerHTML = "<h3 class=`task-name`>" + tasks[i].name + "</h3><span class=`task-type`>" + tasks[i].type + "</span>";
-    taskInfoEl.appendChild(listItemEl)
-
-    if (tasks[i].status=== "to do") {
-      listItemEl.querySelector("select[name=`status-change`]").selectedIndex
-      var selectedIndex = 0
-      listItemEl.appendChild(tasksToDoEl)
-    }
-    else if ( tasks[i].status === "in progress") {
-      var selectedIndex = 1
-      listItemEl.querySelector("select[name=`status-change`]").selectedIndex
-      listItemEl.appendChild(tasksInProgressEl)
-    }
-    else if (tasks[i].status === "completed"){
-      listItemEl.querySelector("select[name='status-change']").selectedIndex
-      var taskSelected = 2
-      listItemEl.appendChild(tasksCompletedEl)
-    }
-    taskIdCounter ++;
+  //loop through savedTasks array
+  for (var i=0; i< savedTasks.length; i++) {
+    //pass each task object into the `createTaskEl()` function
+    createTaskEl(savedTasks[i]);
   }
-}
+};
 
 //create a new task
 formEl.addEventListener("submit", taskFormHandler);
@@ -289,3 +257,5 @@ pageContentEl.addEventListener("click", taskButtonHandler);
 
 //for chaning the status 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+
+loadTasks();
